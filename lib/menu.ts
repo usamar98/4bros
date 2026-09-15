@@ -67,3 +67,7 @@ export const sauces = ["Mayo Garlic", "Chilli Sauce", "Chipotle", "Bar-B-Q", "Dr
 export function formatPrice(item: MenuItem) {
   return item.maxPrice ? `${item.price}–${item.maxPrice}` : String(item.price);
 }
+
+export function menuItemId(item: MenuItem) {
+  return `item-${item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+}

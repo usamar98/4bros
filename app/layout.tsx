@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg" },
   alternates: { canonical: "/" },
   applicationName: "4bros",
+  verification: { google: business.googleSiteVerification },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large" } },
   openGraph: {
     type: "website", locale: "en_PK", siteName: "4bros", url: "/",

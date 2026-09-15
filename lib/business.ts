@@ -6,7 +6,8 @@ export const business = {
     { display: "0306-6259929", international: "+923066259929", whatsapp: "923066259929" },
     { display: "0349-0854581", international: "+923490854581", whatsapp: "923490854581" },
   ],
-  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "https://fourbros-hafizabad.salmanonchain.chatgpt.site").replace(/\/$/, ""),
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "https://4bros-alpha.vercel.app").trim().replace(/\/+$/, ""),
+  googleSiteVerification: process.env.GOOGLE_SITE_VERIFICATION?.trim() || "f5qN6SgRS-ZEK2c4t9w-Bk1vDAHTxKnaCI8ZWaQD_Fw",
 };
 
 export const whatsappUrl = `https://wa.me/${business.phones[0].whatsapp}?text=${encodeURIComponent("Hi 4bros! I'd like to order from your menu.")}`;

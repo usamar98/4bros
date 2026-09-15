@@ -1,5 +1,5 @@
 import { business } from "@/lib/business";
-import { categories, sauces } from "@/lib/menu";
+import { categories, menuItemId, sauces } from "@/lib/menu";
 
 export function restaurantSchema() {
   return {
@@ -20,14 +20,16 @@ export function restaurantSchema() {
         currenciesAccepted: "PKR",
         priceRange: "PKR 50–600",
         hasMenu: { "@id": `${business.siteUrl}/#menu` },
+        mainEntityOfPage: { "@id": `${business.siteUrl}/#webpage` },
       },
       {
         "@type": "Menu", "@id": `${business.siteUrl}/#menu`,
         name: "4bros Hafizabad Menu", inLanguage: "en-PK", url: `${business.siteUrl}/#menu`,
         hasMenuSection: categories.map(category => ({
-          "@type": "MenuSection", name: category.name, url: `${business.siteUrl}/#${category.id}`,
+          "@type": "MenuSection", "@id": `${business.siteUrl}/#${category.id}`, name: category.name, url: `${business.siteUrl}/#${category.id}`,
           hasMenuItem: category.items.map(item => ({
-            "@type": "MenuItem", name: item.name,
+            "@type": "MenuItem", "@id": `${business.siteUrl}/#${menuItemId(item)}`, name: item.name,
+            url: `${business.siteUrl}/#${menuItemId(item)}`,
             ...(item.name === "Dip Sauce" ? { description: `Sauce options: ${sauces.join(", ")}.` } : {}),
             offers: item.maxPrice
               ? { "@type": "Offer", priceCurrency: "PKR", priceSpecification: { "@type": "PriceSpecification", priceCurrency: "PKR", minPrice: item.price, maxPrice: item.maxPrice } }
@@ -38,6 +40,15 @@ export function restaurantSchema() {
       {
         "@type": "WebSite", "@id": `${business.siteUrl}/#website`, name: "4bros Hafizabad",
         url: `${business.siteUrl}/`, inLanguage: "en-PK", publisher: { "@id": `${business.siteUrl}/#restaurant` },
+      },
+      {
+        "@type": "WebPage", "@id": `${business.siteUrl}/#webpage`,
+        name: "4bros Hafizabad | Burgers, Shawarma, Rolls & Sandwiches",
+        url: `${business.siteUrl}/`, inLanguage: "en-PK",
+        isPartOf: { "@id": `${business.siteUrl}/#website` },
+        about: { "@id": `${business.siteUrl}/#restaurant` },
+        mainEntity: { "@id": `${business.siteUrl}/#menu` },
+        description: "The 4bros menu in Hafizabad, Pakistan, with 34 menu entries, prices in PKR, nine dip sauce options, and phone and WhatsApp ordering details.",
       },
     ],
   };

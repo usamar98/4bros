@@ -11,13 +11,13 @@ npm run typecheck
 npm run build
 ```
 
-The build generates a static website in `out/`. Serve that folder with a static hosting provider; `next start` does not serve static exports. The Sites identity is saved in `.openai/hosting.json`.
+The build generates a static website in `out/`. The public website is [4bros on Vercel](https://4bros-alpha.vercel.app/), deployed from the GitHub `main` branch. `next start` does not serve static exports.
 
 ## Editing
 
 - `lib/menu.ts`: all menu names and PKR prices. Petty Burger retains the source's 280–320 range without invented variants.
 - `lib/business.ts`: phones, city, and canonical site URL.
-- `lib/seo.ts`: Restaurant, Menu, MenuSection, MenuItem, Offer and WebSite structured data, generated from the same menu data used on the page.
+- `lib/seo.ts`: linked Restaurant, Menu, MenuSection, MenuItem, Offer, WebSite and WebPage structured data, generated from the same menu data used on the page.
 - `app/globals.css`: brand palette and responsive layout.
 - `public/images/menu-original.jpeg`: original menu and logo source.
 
@@ -27,7 +27,13 @@ Known location: Hafizabad, Pakistan. Exact street address, map pin, hours, busin
 
 The site includes crawlable menu text, canonical and social metadata, sitemap, robots directives, structured menu prices, accessible navigation, local fonts, reduced-motion support, and direct call/WhatsApp links. There are no fabricated reviews or ranking claims.
 
-Sites starts owner-private. Search engines cannot index an owner-private site. Public access is required before SEO can take effect. When a public domain is selected, set `NEXT_PUBLIC_SITE_URL` before the build, verify its canonical and sitemap URLs, and publish there. Claim/complete the restaurant's Google Business Profile with consistent business name, address, phone, hours and this website; verify the public domain in Google Search Console and submit its sitemap.
+The production canonical URL defaults to `https://4bros-alpha.vercel.app`. If setting `NEXT_PUBLIC_SITE_URL` in Vercel, use that same address. Change it only when moving to a permanent custom domain, then rebuild. The sitemap, structured data and social URL all use this value.
+
+For Search Console, use a **URL-prefix property** for `https://4bros-alpha.vercel.app/`. The owner-supplied verification token is already configured in `lib/business.ts` and published through Next.js metadata. `GOOGLE_SITE_VERIFICATION` can override it with another HTML-tag content token; redeploy after changing it. Keep the token after verification.
+
+Follow the [complete Google Search Console and local search setup guide](docs/GOOGLE-SEARCH-CONSOLE.md) for exact values and steps. See the [SEO and GEO implementation notes](docs/SEO-GEO-STATUS.md) for completed work and remaining business details.
+
+After building, run `node scripts/verify-build.mjs` to verify prices, anchors, schema, canonical, sitemap, robots and verification metadata in the exported HTML.
 
 No website can guarantee first place in Google or AI answers. SEO helps make accurate information accessible. Useful references:
 
