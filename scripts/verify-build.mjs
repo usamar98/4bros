@@ -60,6 +60,7 @@ assert(readFileSync("out/sitemap.xml", "utf8").includes(`<loc>${restaurant.url}<
 const sitemap = readFileSync("out/sitemap.xml", "utf8");
 assert.equal((sitemap.match(/<loc>/g) || []).length, 1, "Only the single canonical HTML page belongs in the sitemap");
 const redirects = JSON.parse(readFileSync("vercel.json", "utf8")).redirects;
+assert(redirects.some(rule => rule.source === "/" && rule.destination === expectedSiteUrl && rule.permanent && rule.has?.some(condition => condition.type === "host" && condition.value === "4bros-alpha.vercel.app")), "The legacy homepage needs an explicit root redirect");
 assert(redirects.some(rule => rule.source === "/:path*" && rule.destination === `${expectedSiteUrl}:path*` && rule.permanent && rule.has?.some(condition => condition.type === "host" && condition.value === "4bros-alpha.vercel.app")), "Preserve old website and menu QR destinations with a host-scoped permanent redirect");
 for (const asset of ["out/images/menu-original.jpeg", "out/favicon.svg", "out/404.html"]) assert(existsSync(asset), `Missing asset ${asset}`);
 console.log("PASS: 34 menu entries with matching visible/schema prices and working links; four categories, nine sauces, phones, Hafizabad facts, linked Restaurant/Menu/WebPage schema, public canonical, sitemap, robots, Google verification handling, unique anchors and assets.");
