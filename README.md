@@ -11,7 +11,7 @@ npm run typecheck
 npm run build
 ```
 
-The build generates a static website in `out/`. The public website is [4bros on Vercel](https://4bros-alpha.vercel.app/), deployed from the GitHub `main` branch. `next start` does not serve static exports.
+The build generates a static website in `out/`. The public website is [4bros](https://www.4bros.website/), hosted on Vercel and deployed from the GitHub `main` branch. `next start` does not serve static exports.
 
 ## Editing
 
@@ -27,9 +27,11 @@ Known location: Hafizabad, Pakistan. Exact street address, map pin, hours, busin
 
 The site includes crawlable menu text, canonical and social metadata, sitemap, robots directives, structured menu prices, accessible navigation, local fonts, reduced-motion support, and direct call/WhatsApp links. There are no fabricated reviews or ranking claims.
 
-The production canonical URL defaults to `https://4bros-alpha.vercel.app`. If setting `NEXT_PUBLIC_SITE_URL` in Vercel, use that same address. Change it only when moving to a permanent custom domain, then rebuild. The sitemap, structured data and social URL all use this value.
+The permanent canonical URL is `https://www.4bros.website`, set in `lib/business.ts`. The sitemap, robots sitemap reference, structured data and social URL all use this value. `NEXT_PUBLIC_SITE_URL` is no longer read, so an old deployment variable cannot override the public domain.
 
-For Search Console, use a **URL-prefix property** for `https://4bros-alpha.vercel.app/`. The owner-supplied verification token is already configured in `lib/business.ts` and published through Next.js metadata. `GOOGLE_SITE_VERIFICATION` can override it with another HTML-tag content token; redeploy after changing it. Keep the token after verification.
+The owner reports that Google Search Console verification is complete. Use the verified **Domain property** `4bros.website` or **URL-prefix property** `https://www.4bros.website/` to submit `https://www.4bros.website/sitemap.xml`. The owner-supplied verification token remains configured in `lib/business.ts`; `GOOGLE_SITE_VERIFICATION` can override it. Keep the existing verification configuration.
+
+`vercel.json` permanently redirects the former `4bros-alpha.vercel.app` address to the same path on the custom domain. This preserves the existing website and original-menu QR destinations. The apex domain already redirects to `www` through Vercel's domain configuration.
 
 Follow the [complete Google Search Console and local search setup guide](docs/GOOGLE-SEARCH-CONSOLE.md) for exact values and steps. See the [SEO and GEO implementation notes](docs/SEO-GEO-STATUS.md) for completed work and remaining business details.
 

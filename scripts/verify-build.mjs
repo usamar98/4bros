@@ -8,7 +8,7 @@ const restaurant = schema["@graph"].find(node => node["@type"] === "Restaurant")
 const menu = schema["@graph"].find(node => node["@type"] === "Menu");
 const items = menu.hasMenuSection.flatMap(section => section.hasMenuItem);
 const main = html.match(/<main id="main">([\s\S]*?)<\/main>/)?.[1];
-const expectedSiteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://4bros-alpha.vercel.app").trim().replace(/\/+$/, "") + "/";
+const expectedSiteUrl = "https://www.4bros.website/";
 assert(main, "Server-rendered main content must be present");
 assert.equal(restaurant.url, expectedSiteUrl, "Canonical identity must use the public production address");
 assert.equal(menu.hasMenuSection.length, 4);
@@ -41,6 +41,8 @@ for (const [, anchor] of main.matchAll(/href="#([^\"]+)"/g)) assert(html.include
 assert(html.includes(`<link rel="canonical" href="${restaurant.url}"`));
 assert(!html.includes("http://localhost"));
 assert(!html.includes("salmanonchain.chatgpt.site"), "Remove the previous private host from public metadata");
+assert(!html.includes("4bros-alpha.vercel.app"), "The previous Vercel address must not appear in page metadata or schema");
+assert(html.includes(`<meta property="og:url" content="${expectedSiteUrl}"`));
 assert(html.includes('<meta name="robots" content="index, follow"'));
 assert(html.includes('<html lang="en-PK"'));
 assert(main.includes("4bros is a fast-food restaurant in Hafizabad, Pakistan."));
@@ -55,5 +57,9 @@ const verification = process.env.GOOGLE_SITE_VERIFICATION?.trim() || "f5qN6SgRS-
 assert(html.includes(`<meta name="google-site-verification" content="${verification}"`), "Publish the owner-supplied Google verification token");
 assert(readFileSync("out/robots.txt", "utf8").includes(`${restaurant.url}sitemap.xml`));
 assert(readFileSync("out/sitemap.xml", "utf8").includes(`<loc>${restaurant.url}</loc>`));
+const sitemap = readFileSync("out/sitemap.xml", "utf8");
+assert.equal((sitemap.match(/<loc>/g) || []).length, 1, "Only the single canonical HTML page belongs in the sitemap");
+const redirects = JSON.parse(readFileSync("vercel.json", "utf8")).redirects;
+assert(redirects.some(rule => rule.source === "/:path*" && rule.destination === `${expectedSiteUrl}:path*` && rule.permanent && rule.has?.some(condition => condition.type === "host" && condition.value === "4bros-alpha.vercel.app")), "Preserve old website and menu QR destinations with a host-scoped permanent redirect");
 for (const asset of ["out/images/menu-original.jpeg", "out/favicon.svg", "out/404.html"]) assert(existsSync(asset), `Missing asset ${asset}`);
 console.log("PASS: 34 menu entries with matching visible/schema prices and working links; four categories, nine sauces, phones, Hafizabad facts, linked Restaurant/Menu/WebPage schema, public canonical, sitemap, robots, Google verification handling, unique anchors and assets.");

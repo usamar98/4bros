@@ -1,10 +1,11 @@
 # 4bros SEO and GEO implementation
 
-Updated: 15 September 2026. Production: **https://4bros-alpha.vercel.app/**.
+Updated: 15 September 2026. Production: **https://www.4bros.website/**.
 
 ## Implemented
 
-- Corrected the public canonical address, sitemap location, robots sitemap directive, structured-data URLs and social URL. They previously pointed to the former private Sites host.
+- Set the permanent custom domain for the public canonical address, sitemap, robots sitemap directive, structured-data URLs and social URL. A stale `NEXT_PUBLIC_SITE_URL` deployment variable can no longer point them back to an older host.
+- Added a host-scoped permanent redirect from the old Vercel address to matching custom-domain paths, including the original menu used by existing QR codes.
 - Added the owner's supplied Google verification token to the homepage metadata. The `GOOGLE_SITE_VERIFICATION` build environment variable can override it when needed.
 - Kept one indexable homepage with an XML sitemap and unrestricted robots crawl rules. Menu sections are anchors on this page.
 - Added a concise visible explanation of 4bros' food offering and Hafizabad location, plus customer answers about currency, ordering, directions and hours.
@@ -15,7 +16,7 @@ Updated: 15 September 2026. Production: **https://4bros-alpha.vercel.app/**.
 
 ## Needed from the owner
 
-- Completion of Google account verification and sitemap submission. The supplied token is included; the owner must click Verify in Search Console. Follow [the setup guide](GOOGLE-SEARCH-CONSOLE.md).
+- Submit or resubmit the custom-domain sitemap in the already verified Search Console property. The owner confirms verification is complete; the existing verification configuration is retained. Follow [the setup guide](GOOGLE-SEARCH-CONSOLE.md).
 - Exact street/shop address, opening hours and Google Maps/Business Profile URL. City and country are confirmed; these additional details are not invented in the website or schema.
 - Ongoing confirmation of menu prices, business information and ordering availability.
 
@@ -23,6 +24,6 @@ Updated: 15 September 2026. Production: **https://4bros-alpha.vercel.app/**.
 
 Build and export checks establish that the website presents crawlable, internally consistent information. Public HTTP checks can establish that the deployed files are reachable and use the correct canonical. These checks do not establish Google's indexing decision, ranking, impressions, clicks, Core Web Vitals field performance, or citation by an AI engine.
 
-No Search Console credentials or field-performance API credentials are configured in this workspace. No invented ratings, reviews, opening hours, precise coordinates or awards have been added.
+The owner confirms Search Console ownership verification. No Search Console API credentials or field-performance API credentials are configured in this workspace, so account reports and indexing decisions have not been independently inspected. No invented ratings, reviews, opening hours, precise coordinates or awards have been added.
 
 GEO here means making the real business and menu understandable and accessible to AI search. Google does not require special AI schema or an `llms.txt` file. [Google's AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide).

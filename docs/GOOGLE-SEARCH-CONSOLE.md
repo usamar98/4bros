@@ -1,130 +1,123 @@
-# 4bros: Google Search Console setup
+# 4bros: Search Console and sitemap
 
-Prepared for **https://4bros-alpha.vercel.app/** on 15 September 2026.
+Updated 15 September 2026 for **https://www.4bros.website/**.
 
-Your supplied verification token has been added to the website. You must finish verification in your own Google account; no Search Console property has been created or verified by this work.
+You have confirmed Google Search Console verification is complete. Keep your existing verification records and Vercel environment variable. You do not need to verify again to submit the sitemap.
 
-## 1. Add the website
+## Exact URLs
 
-Open [Google Search Console](https://search.google.com/search-console), sign in with the Google account that should own the restaurant's website, and choose **Add property → URL prefix**.
+| Use | URL |
+| --- | --- |
+| Main website / canonical URL | https://www.4bros.website/ |
+| Sitemap to submit | https://www.4bros.website/sitemap.xml |
+| Robots file | https://www.4bros.website/robots.txt |
+| Online menu | https://www.4bros.website/#menu |
+| Original menu image | https://www.4bros.website/images/menu-original.jpeg |
 
-Paste this exact value:
+## 1. Select the right verified property
+
+Open [Google Search Console](https://search.google.com/search-console). Select either:
+
+- Your **Domain property** `4bros.website`, which covers the www subdomain; or
+- Your **URL-prefix property** `https://www.4bros.website/`.
+
+A URL-prefix property for only `https://4bros.website/` or the old Vercel hostname does not cover the www homepage. Use the property that includes the exact public URL. [Google: property types](https://support.google.com/webmasters/answer/10432366?hl=en).
+
+## 2. Submit this sitemap
+
+Open **Indexing → Sitemaps → Add a new sitemap**.
+
+For a Domain property, paste the full URL:
 
 ```text
-https://4bros-alpha.vercel.app/
+https://www.4bros.website/sitemap.xml
 ```
 
-Choose **URL prefix** for this Vercel subdomain. A Domain property requires DNS verification; you do not control the parent `vercel.app` domain. [Google: property types](https://support.google.com/webmasters/answer/10432366?hl=en).
-
-## 2. Verify ownership using the HTML tag
-
-**Your code is already installed.** The homepage now includes:
-
-```html
-<meta name="google-site-verification" content="f5qN6SgRS-ZEK2c4t9w-Bk1vDAHTxKnaCI8ZWaQD_Fw" />
-```
-
-Select **HTML tag**, compare its content value with the code above, and click **Verify** if they match. Keep the code after verification.
-
-You supplied the code in `google-site-verification=...` form, which is also used for DNS verification. A Domain property still requires DNS verification; installing an HTML tag does not verify a Domain property. Use the **URL-prefix property** above. If its HTML-tag method supplies a different content token, replace the token using the steps below or send the new tag to your developer. [Google: supported verification methods](https://support.google.com/webmasters/answer/9008080?hl=en).
-
-### Only if Google gives you a different HTML-tag token
-
-1. Expand **HTML tag** under the alternative verification methods.
-2. Google gives you a tag shaped like `<meta name="google-site-verification" content="YOUR_UNIQUE_TOKEN" />`. Google generates the real token; the example is not a usable verification code.
-3. Copy **only the value inside `content="..."`**.
-4. Open your **4bros project in Vercel → Settings → Environment Variables**. Add:
-
-   | Name | Value | Environment |
-   | --- | --- | --- |
-   | `GOOGLE_SITE_VERIFICATION` | The real content token from Google | Production |
-   | `NEXT_PUBLIC_SITE_URL` | `https://4bros-alpha.vercel.app` | Production |
-
-   The site URL already defaults to this address. If the variable exists with an older address, replace that value.
-
-5. Save, then create a new **Production deployment** from the latest `main` commit. You can use **Deployments → latest production deployment → Redeploy**. Existing deployments do not pick up environment changes. [Vercel: environment variables](https://vercel.com/docs/environment-variables).
-6. Wait for deployment to finish. Open the public homepage's page source and find `google-site-verification`; check that the token matches Google's.
-7. Return to Search Console and select **Verify**. Keep the environment variable permanently because Google can check ownership again. [Google: HTML-tag verification](https://support.google.com/webmasters/answer/9008080?hl=en).
-
-You can also send the Google-provided meta tag to your developer to update it. No Google Cloud project or API key is needed for these steps.
-
-## 3. Submit the sitemap
-
-Once verified, select the property above and open **Indexing → Sitemaps**. Under **Add a new sitemap**, enter:
+If the form already displays `https://www.4bros.website/` as a fixed prefix, enter only:
 
 ```text
 sitemap.xml
 ```
 
-The complete sitemap URL is:
+Click **Submit**. Check for **Success**. If you previously submitted this same sitemap while it contained the old Vercel URL, resubmit it now that its contents are corrected. [Google: sitemap submission and status](https://support.google.com/webmasters/answer/7451001?hl=en).
 
-```text
-https://4bros-alpha.vercel.app/sitemap.xml
+The sitemap contains **one canonical page**. All four menu categories and all 34 menu entries are part of that homepage. Fragments such as `/#burgers` and `/#menu` are not separate pages and do not belong in the sitemap.
+
+The expected XML is:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.4bros.website/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1</priority>
+  </url>
+</urlset>
 ```
 
-Select **Submit**, then check its status. The sitemap contains **one page**, because the menu sections are part of the homepage. A successful sitemap submission helps Google discover URLs; it does not guarantee indexing. [Google: Sitemaps report](https://support.google.com/webmasters/answer/7451001?hl=en).
+This file is generated and hosted by the website. You submit its URL; you do not upload the XML to Google. Its date records the last substantive website update and should change when the menu or page changes, rather than on every unrelated build.
 
-## 4. Request indexing
+## 3. Inspect the homepage and request indexing
 
-Paste this in Search Console's top **URL Inspection** field:
+Paste this exact URL into the top **URL Inspection** field:
 
 ```text
-https://4bros-alpha.vercel.app/
+https://www.4bros.website/
 ```
 
-Select **Test live URL**, review the result, then **Request indexing** if the page can be indexed. Check that the user-declared canonical is the public Vercel homepage. Google's selected canonical may take time to reflect changes; a live test does not mean a page is already indexed. [Google: inspect a page](https://support.google.com/webmasters/answer/12482179?hl=en).
+Select **Test live URL**. Check that crawling is allowed, the page fetch succeeds, and indexing is allowed. Then select **Request indexing**. The user-declared canonical should be `https://www.4bros.website/`. Google's selected canonical and indexed version can take time to update. A successful live test does not mean the page is already indexed. [Google: inspect a page](https://support.google.com/webmasters/answer/12482179?hl=en).
 
-Do not submit `localhost`, the former private Sites URL, or menu fragments such as `/#burgers` as separate pages. Use the HTML homepage for menu searches; the original menu JPEG remains a customer download and QR destination.
+Do not use Google's Removals tool to migrate from the old hostname. Permanent redirects, the canonical URL and the updated sitemap identify the preferred address. If the old Vercel property was verified and indexed, consider Google's Change of Address tool from that old property where supported; both old and new properties must be owned. [Google: site moves](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes).
 
-## 5. Check results and problems
+## 4. Related files and reports
 
-| Search Console area | What to check |
+The robots file is already published as:
+
+```text
+User-Agent: *
+Allow: /
+
+Sitemap: https://www.4bros.website/sitemap.xml
+```
+
+You do not submit robots.txt separately. There is no keyword box, metadata upload, or structured-data upload in Search Console; that information belongs in the website's code.
+
+| Report | What to check |
 | --- | --- |
-| Sitemaps | The submitted sitemap can be fetched successfully. |
-| Page indexing | Whether the homepage is indexed; inspect any exclusion reason. |
-| URL Inspection | Crawl access and declared/Google-selected canonical. |
-| Performance → Search results | Impressions, clicks, search queries and average position; filter Country to Pakistan when useful. |
-| Core Web Vitals | Any available real-user performance findings. A new or small site may have insufficient data. |
-| HTTPS | Any reported HTTPS issues. |
-| Security issues / Manual actions | Investigate issues if Google reports any. |
+| Sitemaps | Sitemap status is Success. One page is expected. |
+| Page indexing | Whether the homepage is indexed, or why it is excluded. |
+| URL Inspection | Declared canonical is the www custom domain; review Google's selected canonical once processed. |
+| Performance → Search results | Clicks, impressions, queries and average position. Filter to Pakistan when useful. |
+| Core Web Vitals | Real-user performance findings when enough data is available. |
+| HTTPS | Any HTTPS errors reported by Google. |
+| Security issues / Manual actions | Investigate only if Google reports an issue. |
 
-Data may take time to appear. Do not repeatedly resubmit an unchanged page. After a meaningful menu, location or domain change, redeploy, inspect the URL and check the sitemap again. [Google: getting started with Search Console](https://support.google.com/webmasters/answer/6258314?hl=en).
+For additional checks, paste the homepage URL into [Google Rich Results Test](https://search.google.com/test/rich-results), [Schema Markup Validator](https://validator.schema.org/) or [PageSpeed Insights](https://pagespeed.web.dev/). No ranking or performance score is claimed without actual measurement.
 
-There is **no keyword box** to fill in Search Console. Titles, descriptions, structured data, robots rules and menu text are already in the website's code. The homepage contains the named menu items naturally, including burgers, zinger burgers, shawarma, rolls and sandwiches in Hafizabad.
+## 5. Domain and verification configuration
 
-## 6. Complete Google Business Profile for local discovery
+- `lib/business.ts` sets the permanent website address to `https://www.4bros.website` for canonical, sitemap, robots and structured-data URLs.
+- An old `NEXT_PUBLIC_SITE_URL` environment variable is no longer used; it cannot override this address and can be removed from Vercel when convenient.
+- Keep your existing `GOOGLE_SITE_VERIFICATION` setting and any DNS verification TXT record. The website continues supporting the configured HTML verification token. Existing Google verification does not need to be repeated.
+- `vercel.json` adds a permanent redirect from `https://4bros-alpha.vercel.app/` to the matching path on the custom domain. The menu-image path stays the same, so previously printed QR codes can reach the menu through the redirect.
+- `https://4bros.website/` and HTTP requests already redirect to the HTTPS www domain through Vercel.
 
-Search Console covers the website. For Google Maps and local restaurant results, claim or manage the restaurant at [Google Business Profile](https://business.google.com/).
+## 6. Google Maps and local business information
 
-Use these business details consistently with the website:
+Update your [Google Business Profile](https://business.google.com/) website field to **https://www.4bros.website/** and its menu link to **https://www.4bros.website/#menu**.
 
 | Field | Value |
 | --- | --- |
-| Business name | 4bros — use the real name on your signage, without added search keywords |
-| Business category | Choose the most specific accurate available category, such as Fast food restaurant |
+| Business name | 4bros |
 | City / country | Hafizabad, Pakistan |
 | Primary phone | +92 306 6259929 |
 | Additional phone | +92 349 0854581 |
-| Website | https://4bros-alpha.vercel.app/ |
-| Menu link | https://4bros-alpha.vercel.app/#menu |
-| Full address / map pin | Add the actual street, shop details and precise entrance location |
-| Opening hours | Add actual weekly hours and holiday changes |
-| Photos / menu | Upload current photos of the restaurant, signage, food and supplied menu |
+| Full shop/street address | Still needed from the owner |
+| Opening hours | Still needed from the owner |
+| Google Maps link | Still needed from the owner |
 
-Provide the exact address, hours and Google Maps link to your developer so the public contact section and Restaurant structured data can match the verified profile. Ask actual customers for honest reviews and reply to them.
+Provide the remaining details so the site's visible contact information and Restaurant structured data can match the real location. Google local results depend mainly on relevance, distance and prominence. [Google: improve local ranking](https://support.google.com/business/answer/7091?hl=en).
 
-Google says local results depend mainly on relevance, distance and prominence; complete information helps but no one can guarantee first place. [Google: improve local ranking](https://support.google.com/business/answer/7091?hl=en).
-
-## SEO and AI search checks
-
-- [Robots file](https://4bros-alpha.vercel.app/robots.txt)
-- [Sitemap](https://4bros-alpha.vercel.app/sitemap.xml)
-- [Google Rich Results Test](https://search.google.com/test/rich-results): paste the homepage URL. Incomplete street address/hours still need real business details; not every Schema.org type produces a Google enhancement.
-- [Schema Markup Validator](https://validator.schema.org/): inspect the linked Restaurant and Menu data.
-- [PageSpeed Insights](https://pagespeed.web.dev/): paste the homepage URL to measure performance; no score is claimed until measured.
-
-The site provides crawlable HTML menu text, matching prices and structured data, clear local business facts and useful customer answers. Google's AI search uses ordinary search foundations; special AI markup or an `llms.txt` file is not required. There is no guaranteed placement in Google AI answers or other AI search tools. [Google: AI optimization guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide).
-
-## If you later connect a custom domain
-
-Choose the permanent domain, redirect the former website to it, update `NEXT_PUBLIC_SITE_URL`, and redeploy. Verify the new Search Console property and submit its sitemap. Recheck the printed QR destinations before retiring the current Vercel URL.
+The server-rendered menu, accurate prices, local facts and linked Restaurant/Menu data also make the site understandable to AI search. Special AI markup or `llms.txt` is not required for Google AI search. Indexing, rankings and AI citations remain decisions of the search platforms. [Google: AI search guidance](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide).
